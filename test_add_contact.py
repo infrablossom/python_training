@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from selenium.webdriver.firefox.webdriver import WebDriver
-from selenium.webdriver.common.action_chains import ActionChains
+
+
 import time, unittest
 
 def is_alert_present(wd):
@@ -10,9 +11,10 @@ def is_alert_present(wd):
     except:
         return False
 
-class (unittest.TestCase):
+
+class test_add_contact(unittest.TestCase):
     def setUp(self):
-        self.wd = WebDriver()
+        self.wd = WebDriver(capabilities={"marionette": False})
         self.wd.implicitly_wait(60)
     
     def test_(self):
