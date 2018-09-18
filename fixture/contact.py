@@ -64,7 +64,6 @@ class ContactHelper:
         wd.find_element_by_name("phone2").send_keys(contact.phone2)
         wd.find_element_by_name("update").click()
 
-
     def fill_contact_form(self, contact):
         wd = self.app.wd
         self.change_field_value("firstname", contact.firstname)
@@ -104,7 +103,8 @@ class ContactHelper:
 
     def return_to_home_page(self):
         wd = self.app.wd
-        wd.find_element_by_xpath("//div[@id='nav']/ul/li/a").click()
+        if not (wd.current_url.endswith("/addressbook/") and len(wd.find_elements_by_xpath("//a[contains(text(),'Last name')]")) > 0):
+            wd.find_element_by_xpath("//div[@id='nav']/ul/li/a").click()
 
     def count_contacts(self):
         wd = self.app.wd
