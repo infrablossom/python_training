@@ -1,6 +1,7 @@
 # вспомогательный класс для хранения свойств группы
 from sys import maxsize
 
+
 class Group:
 
     def __init__(self, name=None, header=None, footer=None, id=None):

@@ -1,4 +1,4 @@
-
+from model.contact import Contact
 
 class ContactHelper:
 
@@ -21,7 +21,6 @@ class ContactHelper:
         wd.find_element_by_name("selected[]").click()
         wd.find_element_by_xpath("//div[@id='content']/form[2]/div[2]/input").click()
         wd.switch_to_alert().accept()
-
 
     def edit_first_contact(self, contact):
         wd = self.app.wd
@@ -109,6 +108,18 @@ class ContactHelper:
     def count_contacts(self):
         wd = self.app.wd
         return len(wd.find_elements_by_name("selected[]"))
+
+    def get_contact_list(self):
+        wd = self.app.wd
+        self.return_to_home_page()
+        contacts = []
+        for element in wd.find_elements_by_css_selector("entry"):
+            cells = element.find_elements_by_tag_name("td")
+            #text = element.text
+            id = element.find_element_by_name("selected[]").get_attribute("value")
+            contacts.append(Contact(lastname=cells[1].text, firstname=cells[2].text, id=id))
+        return contacts
+
 
 
 
