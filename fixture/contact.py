@@ -1,5 +1,6 @@
 from model.contact import Contact
 
+
 class ContactHelper:
 
     def __init__(self, app):
@@ -24,44 +25,10 @@ class ContactHelper:
 
     def edit_first_contact(self, contact):
         wd = self.app.wd
-        wd.find_element_by_xpath("//table[@id='maintable']/tbody/tr[2]/td[8]/a/img").click()
-        wd.find_element_by_name("firstname").click()
-        wd.find_element_by_name("firstname").clear()
-        wd.find_element_by_name("firstname").send_keys(contact.firstname)
-        wd.find_element_by_name("middlename").click()
-        wd.find_element_by_name("middlename").clear()
-        wd.find_element_by_name("middlename").send_keys(contact.middlename)
-        wd.find_element_by_name("lastname").click()
-        wd.find_element_by_name("lastname").clear()
-        wd.find_element_by_name("lastname").send_keys(contact.lastname)
-        wd.find_element_by_name("nickname").click()
-        wd.find_element_by_name("nickname").clear()
-        wd.find_element_by_name("nickname").send_keys(contact.nick)
-        wd.find_element_by_name("title").click()
-        wd.find_element_by_name("title").clear()
-        wd.find_element_by_name("title").send_keys(contact.title)
-        wd.find_element_by_name("company").click()
-        wd.find_element_by_name("company").clear()
-        wd.find_element_by_name("company").send_keys(contact.company)
-        wd.find_element_by_name("home").click()
-        wd.find_element_by_name("home").clear()
-        wd.find_element_by_name("home").send_keys(contact.home)
-        wd.find_element_by_name("mobile").click()
-        wd.find_element_by_name("mobile").clear()
-        wd.find_element_by_name("mobile").send_keys(contact.mobile)
-        wd.find_element_by_name("work").click()
-        wd.find_element_by_name("work").clear()
-        wd.find_element_by_name("work").send_keys(contact.work)
-        wd.find_element_by_name("fax").click()
-        wd.find_element_by_name("fax").clear()
-        wd.find_element_by_name("fax").send_keys(contact.fax)
-        wd.find_element_by_name("email").click()
-        wd.find_element_by_name("email").clear()
-        wd.find_element_by_name("email").send_keys(contact.email)
-        wd.find_element_by_name("phone2").click()
-        wd.find_element_by_name("phone2").clear()
-        wd.find_element_by_name("phone2").send_keys(contact.phone2)
+        wd.find_element_by_xpath(".//*[@id='maintable']/tbody/tr[2]/td[8]/a/img").click()
+        self.fill_contact_form(contact)
         wd.find_element_by_name("update").click()
+        wd.find_element_by_xpath(".//*[@id='logo']").click()
 
     def fill_contact_form(self, contact):
         wd = self.app.wd
@@ -107,7 +74,8 @@ class ContactHelper:
 
     def count_contacts(self):
         wd = self.app.wd
-        return len(wd.find_elements_by_name("selected[]"))
+        self.return_to_home_page()
+        return len(wd.find_elements_by_xpath(".//*[@id='maintable']/tbody/tr[2]/td[8]/a/img"))
 
     def get_contact_list(self):
         wd = self.app.wd
@@ -115,10 +83,26 @@ class ContactHelper:
         contacts = []
         for element in wd.find_elements_by_css_selector("entry"):
             cells = element.find_elements_by_tag_name("td")
-            #text = element.text
+            # text = element.text
             id = element.find_element_by_name("selected[]").get_attribute("value")
             contacts.append(Contact(lastname=cells[1].text, firstname=cells[2].text, id=id))
         return contacts
+
+    def open_new_address_form(self):
+        wd = self.app.wd
+        if not(wd.current_url.endswith("/edit.php") and len(wd.find_elements_by_name("submit")) > 0):
+            wd.find_element_by_link_text("add new").click()
+
+    def input_list(self, contact):
+        wd = self.app.wd
+        self.open_new_address_form()
+        self.fill_contact_form(contact)
+        self.contact_submit()
+        self.return_to_home_page()
+
+    def contact_submit(self):
+        wd = self.app.wd
+        wd.find_element_by_xpath(".//*[@id='content']/form/input[21]").click()
 
 
 
