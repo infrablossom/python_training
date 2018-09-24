@@ -81,11 +81,11 @@ class ContactHelper:
         wd = self.app.wd
         self.return_to_home_page()
         contacts = []
-        for element in wd.find_elements_by_css_selector("entry"):
+        for element in wd.find_elements_by_name("entry"):
             cells = element.find_elements_by_tag_name("td")
             # text = element.text
             id = element.find_element_by_name("selected[]").get_attribute("value")
-            contacts.append(Contact(lastname=cells[1].text, firstname=cells[2].text, id=id))
+            contacts.append(Contact(firstname=cells[1].text, lastname=cells[2].text, id=id))
         return contacts
 
     def open_new_address_form(self):
