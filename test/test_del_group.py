@@ -9,7 +9,7 @@ def test_delete_first_group(app):
     new_groups = app.group.get_group_list()
     # не удаляем строку проверки длины 2 списков для перестраховки
     # и более понятного эксепшена в случае отсутствия элементов
-    assert len(old_groups) - 1 == len(new_groups)
+    assert len(old_groups) - 1 == app.group.count_groups()
     old_groups[0:1] = []
     assert old_groups == new_groups
 

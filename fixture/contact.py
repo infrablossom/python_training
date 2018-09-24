@@ -12,6 +12,7 @@ class ContactHelper:
         self.fill_contact_form(contact)
         wd.find_element_by_xpath("//div[@id='content']/form/input[21]").click()
         self.return_to_home_page()
+        self.contact_cache = None
 
     # def fill_fields(self, contact):
         # wd.find_element_by_name("selected[]")
@@ -22,6 +23,7 @@ class ContactHelper:
         wd.find_element_by_name("selected[]").click()
         wd.find_element_by_xpath("//div[@id='content']/form[2]/div[2]/input").click()
         wd.switch_to_alert().accept()
+        self.contact_cache = None
 
     def edit_first_contact(self, contact):
         wd = self.app.wd
@@ -66,6 +68,7 @@ class ContactHelper:
         # submit modif
         wd.find_element_by_name("update").click()
         self.return_to_home_page()
+        self.contact_cache = None
 
     def return_to_home_page(self):
         wd = self.app.wd
@@ -77,16 +80,20 @@ class ContactHelper:
         self.return_to_home_page()
         return len(wd.find_elements_by_xpath(".//*[@id='maintable']/tbody/tr[2]/td[8]/a/img"))
 
+    contact_cache = None
+
     def get_contact_list(self):
-        wd = self.app.wd
-        self.return_to_home_page()
-        contacts = []
-        for element in wd.find_elements_by_name("entry"):
-            cells = element.find_elements_by_tag_name("td")
-            # text = element.text
-            id = element.find_element_by_name("selected[]").get_attribute("value")
-            contacts.append(Contact(firstname=cells[1].text, lastname=cells[2].text, id=id))
-        return contacts
+        if self.contact_cache is None:
+            wd = self.app.wd
+            self.return_to_home_page()
+            self.contact_cache = []
+            contacts = []
+            for element in wd.find_elements_by_name("entry"):
+                cells = element.find_elements_by_tag_name("td")
+                # text = element.text
+                id = element.find_element_by_name("selected[]").get_attribute("value")
+                contacts.append(Contact(firstname=cells[1].text, lastname=cells[2].text, id=id))
+            return contacts
 
     def open_new_address_form(self):
         wd = self.app.wd
