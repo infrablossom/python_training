@@ -14,11 +14,9 @@ class ContactHelper:
         self.return_to_home_page()
         self.contact_cache = None
 
-    # def fill_fields(self, contact):
-        # wd.find_element_by_name("selected[]")
-
     def delete_first_contact(self):
         self.delete_contact_by_index(0)
+        self.contact_cache = None
 
     def delete_contact_by_index(self, index):
         wd = self.app.wd
@@ -35,11 +33,13 @@ class ContactHelper:
         self.fill_contact_form(contact)
         wd.find_element_by_name("update").click()
         wd.find_element_by_xpath(".//*[@id='logo']").click()
+        self.contact_cache = None
 
     def fill_contact_form(self, contact):
         wd = self.app.wd
         self.change_field_value("firstname", contact.firstname)
         self.change_field_value("middlename", contact.middlename)
+        self.change_field_value("lastname", contact.lastname)
         self.change_field_value("title", contact.title)
         self.change_field_value("company", contact.company)
         self.change_field_value("home", contact.home)
@@ -47,7 +47,6 @@ class ContactHelper:
         self.change_field_value("work", contact.work)
         self.change_field_value("fax", contact.fax)
         self.change_field_value("email", contact.email)
-        self.change_field_value("title", contact.title)
         self.change_field_value("phone2", contact.phone2)
 
     def change_field_value(self, field_name, text):
@@ -63,10 +62,11 @@ class ContactHelper:
 
     def select_contact_by_index(self, index):
         wd = self.app.wd
-        wd.find_element_by_name("selected[]")[index].click()
+        wd.find_elements_by_name("selected[]")[index].click()
 
-    def modify_first_contact(self, new_contact_data):
+    def modify_first_contact(self):
         self.modify_contact_by_index(0)
+        self.contact_cache = None
 
     def modify_contact_by_index(self, index, new_contact_data):
         wd = self.app.wd
@@ -89,22 +89,22 @@ class ContactHelper:
     def count_contacts(self):
         wd = self.app.wd
         self.return_to_home_page()
-        return len(wd.find_elements_by_xpath(".//*[@id='maintable']/tbody/tr[2]/td[8]/a/img"))
+        return len(wd.find_elements_by_name("selected[]"))
 
     contact_cache = None
 
     def get_contact_list(self):
         if self.contact_cache is None:
             wd = self.app.wd
-            self.return_to_home_page()
+            self.app.open_home_page()
             self.contact_cache = []
-            contacts = []
             for element in wd.find_elements_by_name("entry"):
                 cells = element.find_elements_by_tag_name("td")
-                # text = element.text
-                id = element.find_element_by_name("selected[]").get_attribute("value")
-                contacts.append(Contact(firstname=cells[1].text, lastname=cells[2].text, id=id))
-            return contacts
+                lastname = cells[1].text
+                firstname = cells[2].text
+                id = cells[0].find_element_by_tag_name("input").get_attribute("value")
+                self.contact_cache.append(Contact(firstname=firstname, lastname=lastname, id=id))
+        return list(self.contact_cache)
 
     def open_new_address_form(self):
         wd = self.app.wd
@@ -121,6 +121,20 @@ class ContactHelper:
     def contact_submit(self):
         wd = self.app.wd
         wd.find_element_by_xpath(".//*[@id='content']/form/input[21]").click()
+
+    def open_contact_to_edit_by_index(self, index):
+        wd = self.app.wd
+        self.app.open_home_page()
+        element = wd.find_elements_by_name("entry")[index]
+        cell = element.find_elements_by_tag_name("td")[7]
+        cell.find_element_by_tag_name("a").click()
+
+    def open_contact_view_by_index(self, index):
+        wd = self.app.wd
+        self.app.open_home_page()
+        element = wd.find_elements_by_name("entry")[index]
+        cell = element.find_elements_by_tag_name("td")[6]
+        cell.find_element_by_tag_name("a").click()
 
 
 
