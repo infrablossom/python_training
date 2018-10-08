@@ -11,7 +11,7 @@ class Group:
         self.id = id
 
     def __repr__(self):
-        return "%s:%s" % (self.id, self.name)
+        return "%s:%s;%s;%s" % (self.id, self.name, self.header, self.footer)
 
     # определила функцию сравнения самих объектов, а не их физического расположения в памяти
     def __eq__(self, other):

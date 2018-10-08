@@ -1,14 +1,30 @@
 # -*- coding: utf-8 -*-
 
 from model.contact import Contact
+import pytest
+import random
+import string
 
 
-def test_add_contact(app):
+def random_string(prefix, maxlen):
+    symbols = string.ascii_letters + string.digits + string.punctuation + " "*10
+    return prefix + "".join([random.choice(symbols) for i in range(random.randrange(maxlen))])
+
+
+testdata = [Contact(firstname="", middlename="", lastname="", nick="", title="", company="", home="", mobile="",
+                    work="", fax="", email="", phone2="")] + [
+    Contact(firstname=random_string("name", 10), middlename=random_string("header", 20),
+            lastname=random_string("footer", 20), nick=random_string("footer", 10), title=random_string("title", 10),
+            company=random_string("company", 10), home=random_string("home", 10), mobile=random_string("mobile", 10),
+            work=random_string("work", 10), fax=random_string("fax", 10), email=random_string("email", 10),
+            phone2=random_string("phone2", 10))
+    for i in range(5)
+    ]
+
+
+@pytest.mark.parametrize("contact", testdata, ids=[repr(x) for x in testdata])
+def test_add_contact(app, contact):
     old_contacts = app.contact.get_contact_list()
-    contact = Contact(firstname="Name", middlename="QA", lastname="Lastname", nick="Nick", title="Title", company="OOO", home="3434", mobile="3434", work="3434", fax="3434",
-                                    email="example@ex.com", phone2="home")
-    # contact = Contact(firstname="Name", middlename="QA", lastname="Lastname", nick="Nick", title="Title", company="OOO", home="3434", mobile="3434", work="3434", fax="3434",
-                                    # email="example@ex.com", phone2="home")
     app.contact.input_list(contact)
     new_contacts = app.contact.get_contact_list()
     assert len(old_contacts) + 1 == app.contact.count_contacts()

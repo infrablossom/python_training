@@ -82,9 +82,9 @@ class ContactHelper:
         self.return_to_home_page()
         self.contact_cache = None
 
-    def open_modif_form(self,):
+    def open_modif_form(self, index):
         wd = self.app.wd
-        wd.find_element_by_xpath("//table[@id='maintable']/tbody/tr[2]/td[8]/a/img").click()
+        wd.find_element_by_xpath("//table[@id='maintable']/tbody/tr[2]/td[8]/a/img")[index].click()
 
     def return_to_home_page(self):
         wd = self.app.wd
@@ -128,6 +128,7 @@ class ContactHelper:
         self.fill_contact_form(contact)
         self.contact_submit()
         self.return_to_home_page()
+        self.contact_cache=None
 
     def contact_submit(self):
         wd = self.app.wd
