@@ -33,12 +33,12 @@ testdata = [Contact(firstname="", middlename="", lastname="", nick="", homephone
             phone2="", work="", email="", email2="", email3="", fax="",
             mobile="", address="")] + [
     Contact(firstname=random_string("firstname", 10), middlename=random_string("middlename", 20),
-            lastname=random_string("lastname", 20), homephone=random_string("homephone",10),
+            lastname=random_string("lastname", 20), homephone=random_string("homephone", 10),
             company=random_string("company", 10), title=random_string("title", 10),
             mobilephone=random_string("mobilephone", 10),
             workphone=random_string("workphone", 10), secondaryphone=random_string("secondaryphone", 10),
-            home=random_string("home", 10), phone2=("phone2", 10), work=("work", 10), email=("email", 10),
-            email2=("email2", 10), email3=("email3", 10), fax=("fax", 10),
+            home=random_string("home", 10), phone2=random_string("phone2", 10), work=random_string("work", 10), email=random_string("email", 10),
+            email2=random_string("email2", 10), email3=random_string("email3", 10), fax=random_string("fax", 10),
             mobile=random_string("mobile", 10), address=random_string("address", 10))
     for i in range(n)
     ]
