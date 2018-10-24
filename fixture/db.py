@@ -30,7 +30,8 @@ class DbFixture:
         cursor = self.connection.cursor()
         try:
             cursor.execute(
-                "select id, firstname, middlename, lastname, company, title, home, work from contact_list")
+                "select id, firstname, middlename, lastname, nickname, company, title, address, home, mobile, work, "
+                "fax, email, email2, email3, homepage, notes from addressbook where deprecated='0000-00-00 00:00:00'")
             for row in cursor:
                 (id, firstname, middlename, lastname, nickname, company, title, address, home, mobile, work, fax, email,
                  email2, email3, homepage, notes) = row

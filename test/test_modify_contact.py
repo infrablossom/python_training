@@ -26,7 +26,7 @@ def test_contact_edit(app, db, json_contacts):
                       company="example", address="example", homephone="+678678786", mobilephone="75675675",
                       workphone="+89787898", fax="+89789789", email="example@k.k")
     contact.id = old_contacts[index].id
-    app.group.modify_contact_by_id(contact.id, json_contacts)
+    app.contact.modify_contact_by_id(contact.id, json_contacts)
     new_contacts = db.get_contact_list()
     assert len(old_contacts) == len(new_contacts)
     old_contacts[index] = contact
