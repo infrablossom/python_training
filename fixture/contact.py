@@ -47,7 +47,7 @@ class ContactHelper:
     def modify_contact_by_id(self, id, new_contact_data):
         wd = self.app.wd
         self.return_to_home_page()
-        self.open_modif_form(id)
+        self.open_modif_form_by_id(id)
         # open modif form
         wd.find_element_by_xpath("//table[@id='maintable']/tbody/tr[2]/td[8]/a/img").click()
         # fill contact form
@@ -110,6 +110,10 @@ class ContactHelper:
     def open_modif_form(self, index):
         wd = self.app.wd
         wd.find_element_by_xpath("//table[@id='maintable']/tbody/tr[2]/td[8]/a/img")[index].click()
+
+    def open_modif_form_by_id(self, id):
+        wd = self.app.wd
+        wd.find_element_by_xpath("//table[@id='maintable']/tbody/tr[2]/td[8]/a/img")[id].click()
 
     def return_to_home_page(self):
         wd = self.app.wd
