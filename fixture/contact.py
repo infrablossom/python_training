@@ -23,10 +23,15 @@ class ContactHelper:
         wd = self.app.wd
         self.return_to_home_page()
         self.select_contact_by_index(index)
-        wd.find_element_by_name("selected[]").click()
+        self.open_modif_form()
+        # wd.find_element_by_name("selected[]").click()
         wd.find_element_by_xpath("//div[@id='content']/form[2]/div[2]/input").click()
         wd.switch_to_alert().accept()
         self.contact_cache = None
+
+    def open_modif_form(self):
+        wd = self.app.wd
+        wd.find_element_by_xpath("//table[@id='maintable']/tbody/tr[2]/td[8]/a/img").click()
 
     def contact_delete_homepage_by_id(self, id):
         wd = self.app.wd
@@ -205,6 +210,14 @@ class ContactHelper:
         secondaryphone = re.search("P: (.*)", text).group(1)
         return Contact(homephone=homephone, mobilephone=mobilephone,
                        workphone=workphone, secondaryphone=secondaryphone)
+
+    def edit_random_contact(self, index, contact_create):
+        wd = self.app.wd
+        wd.find_elements_by_xpath(".//*[@title='Edit']")[index].click()
+        self.fill_contact_form(contact_create)
+        wd.find_element_by_name("update").click()
+        wd.find_element_by_xpath(".//*[@id='logo']").click()
+        self.contact_cache = None
 
 
 
